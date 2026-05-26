@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пенсионный калькулятор</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #2E1F14;
+            font-family: 'Segoe UI', 'Poppins', system-ui, sans-serif;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 450px;
+            margin: 0 auto;
+            background: #3D2B1F;
+            border-radius: 28px;
+            padding: 35px;
+        }
+
+        h1 {
+            color: #E8C49A;
+            font-weight: 700;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        hr {
+            border: none;
+            border-top: 2px solid #C28A5C;
+            width: 60px;
+            margin: 0 auto 25px auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: #DEB887;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 10px 12px;
+            background: #2E1F14;
+            border: 1px solid #8B691B;
+            border-radius: 12px;
+            color: #F5E6D3;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        input[type="number"]:focus {
+            border-color: #DEB887;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+            background: #2E1F14;
+            padding: 10px 15px;
+            border-radius: 12px;
+            border: 1px solid #8B691B;
+        }
+
+        .radio-group label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 0;
+            cursor: pointer;
+            color: #F0DCC0;
+        }
+
+        .radio-group input[type="radio"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            accent-color: #C28A5C;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #8B5A2B;
+            color: #FFF5E6;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            margin: 10px 0 15px 0;
+        }
+
+        button:hover {
+            background: #A06B3A;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px 12px;
+            background: #2E1F14;
+            border: 1px solid #8B691B;
+            border-radius: 12px;
+            color: #F5E6D3;
+            font-size: 0.9rem;
+            resize: vertical;
+            outline: none;
+            font-family: inherit;
+            min-height: 80px;
+        }
+
+        textarea:focus {
+            border-color: #DEB887;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Пенсионный калькулятор</h1>
+    <hr>
+    
+    <form id="pensionForm">
+        <div class="form-group">
+            <label>Возраст:</label>
+            <input type="number" id="userAge" required>
+        </div>
+
+        <div class="form-group">
+            <label>Пол:</label>
+            <div class="radio-group">
+                <label><input type="radio" name="userGender" value="male" required> Мужской</label>
+                <label><input type="radio" name="userGender" value="female" required> Женский</label>
+            </div>
+        </div>
+
+        <button type="submit">Рассчитать</button>
+        <textarea id="userResult" readonly placeholder="Результат..."></textarea>
+    </form>
+</div>
+
+<script>
+    document.getElementById('pensionForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const age = parseInt(document.getElementById('userAge').value, 10);
+        const gender = document.querySelector('input[name="userGender"]:checked');
+        const result = document.getElementById('userResult');
+
+        if (isNaN(age) || !gender) {
+            result.value = "Да кто ты такой?";
+            return;
+        }
+
+        const isMale = gender.value === 'male';
+
+        if (age >= 0 && age <= 17) {
+            result.value = "Вам работать ещё рано — учитесь";
+        }
+        else if (age >= 18 && age <= 59 && isMale) {
+            result.value = "Вам ещё работать и работать";
+        }
+        else if (age >= 18 && age <= 54 && !isMale) {
+            result.value = "Вам ещё работать и работать";
+        }
+        else if (age >= 60 && age <= 64 && isMale) {
+            result.value = "Скоро пенсия!";
+        }
+        else if (age >= 55 && age <= 59 && !isMale) {
+            result.value = "Скоро пенсия!";
+        }
+        else if (age >= 65 && isMale) {
+            result.value = "Вам пора на пенсию";
+        }
+        else if (age >= 60 && !isMale) {
+            result.value = "Вам пора на пенсию";
+        }
+        else {
+            result.value = "Да кто ты такой?";
+        }
+    });
+</script>
+</body>
+</html>

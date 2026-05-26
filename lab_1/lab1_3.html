@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ввод числа</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #2E1F14;
+            font-family: 'Segoe UI', 'Poppins', system-ui, sans-serif;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: #3D2B1F;
+            border-radius: 28px;
+            padding: 40px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #E8C49A;
+            font-weight: 700;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        hr {
+            border: none;
+            border-top: 2px solid #C28A5C;
+            width: 60px;
+            margin: 0 auto 30px auto;
+        }
+
+        a {
+            display: inline-block;
+            font-size: 18px;
+            color: #F0DCC0;
+            text-decoration: none;
+            border: 1px solid #C28A5C;
+            padding: 12px 28px;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+            font-weight: 600;
+            background: #8B5A2B;
+        }
+
+        a:hover {
+            background: #A06B3A;
+            color: #FFF5E6;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Ввод числа</h1>
+    <hr>
+    <a href="#" id="getNumberLink">Получить число</a>
+</div>
+
+<script>
+    'use strict';
+
+    const link = document.getElementById('getNumberLink');
+
+    function askForNumber() {
+        while (true) {
+            let input = prompt("Введите число, большее 100:");
+            
+            if (input === null) {
+                return false;
+            }
+            
+            let num = Number(input);
+            
+            if (!isNaN(num) && num > 100) {
+                return true;
+            }
+        }
+    }
+
+    link.addEventListener('click', function(event) {
+        event.preventDefault();
+        
+        const success = askForNumber();
+        
+        if (success) {
+            window.location.href = '../index.html';
+        } else {
+            const allow = confirm("Вы не ввели число больше 100. Всё равно перейти?");
+            if (allow) {
+                window.location.href = '../index.html';
+            }
+        }
+    });
+</script>
+</body>
+</html>

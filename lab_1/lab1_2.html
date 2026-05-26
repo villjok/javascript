@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Считать ворон</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #2E1F14;
+            font-family: 'Segoe UI', 'Poppins', system-ui, sans-serif;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 450px;
+            margin: 0 auto;
+            background: #3D2B1F;
+            border-radius: 28px;
+            padding: 35px;
+        }
+
+        h1 {
+            color: #E8C49A;
+            font-weight: 700;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        hr {
+            border: none;
+            border-top: 2px solid #C28A5C;
+            width: 60px;
+            margin: 0 auto 25px auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: #DEB887;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 10px 12px;
+            background: #2E1F14;
+            border: 1px solid #8B691B;
+            border-radius: 12px;
+            color: #F5E6D3;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        input[type="number"]:focus {
+            border-color: #DEB887;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #8B5A2B;
+            color: #FFF5E6;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: #A06B3A;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🐦‍⬛ Считать ворон</h1>
+    <hr>
+    
+    <form id="ravenForm">
+        <div class="form-group">
+            <label>Количество ворон:</label>
+            <input type="number" id="num" required>
+        </div>
+
+        <button type="button" id="countBtn">Считать</button>
+    </form>
+</div>
+
+<script>
+    'use strict';
+
+    function getCrowEnding(num) {
+        const lastDigit = Math.abs(num) % 10;
+        const lastTwoDigits = Math.abs(num) % 100;
+
+        if (lastTwoDigits >= 11 && lastTwoDigits <= 14) {
+            return "ворон";
+        }
+
+        switch (lastDigit) {
+            case 1:
+                return "ворона";
+            case 2:
+            case 3:
+            case 4:
+                return "вороны";
+            default:
+                return "ворон";
+        }
+    }
+
+    document.getElementById('countBtn').addEventListener('click', function() {
+        const input = document.getElementById('num');
+        let num = parseInt(input.value, 10);
+
+        if (isNaN(num)) {
+            alert("Введите целое число");
+            return;
+        }
+
+        const ending = getCrowEnding(num);
+        alert(`На ветке сидит ${num} ${ending}`);
+    });
+</script>
+</body>
+</html>

@@ -106,7 +106,7 @@
             <div class="info">Результат выводится в консоль (F12)</div>
         </div>
 
-        <button type="button" id="drawBtn">Рисовать</button>
+        <button type="submit" id="drawBtn">Рисовать</button>
     </form>
 </div>
 
@@ -136,7 +136,9 @@
         }
     }
 
-    document.getElementById('drawBtn').addEventListener('click', function() {
+    document.getElementById('tableForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        
         const input = document.getElementById('rows');
         let rowsCount = parseInt(input.value, 10);
         

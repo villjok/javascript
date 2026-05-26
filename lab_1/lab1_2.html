@@ -98,7 +98,7 @@
             <input type="number" id="num" required>
         </div>
 
-        <button type="button" id="countBtn">Считать</button>
+        <button type="submit" id="countBtn">Считать</button>
     </form>
 </div>
 
@@ -125,7 +125,9 @@
         }
     }
 
-    document.getElementById('countBtn').addEventListener('click', function() {
+    document.getElementById('ravenForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        
         const input = document.getElementById('num');
         let num = parseInt(input.value, 10);
 

@@ -124,7 +124,7 @@
             <div class="info">Найдёт все простые числа от 2 до n</div>
         </div>
 
-        <button type="button" id="findBtn">Найти</button>
+        <button type="submit" id="findBtn">Найти</button>
         <textarea id="result" readonly placeholder="Результат появится здесь..."></textarea>
     </form>
 </div>
@@ -154,7 +154,9 @@
         return primes;
     }
 
-    document.getElementById('findBtn').addEventListener('click', function() {
+    document.getElementById('primeForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        
         const input = document.getElementById('n');
         const resultArea = document.getElementById('result');
         

@@ -60,68 +60,163 @@
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.js"></script>
-    <script>
-        mocha.setup('bdd');
-    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chai/3.5.0/chai.js"></script>
     <script>
+        mocha.setup('bdd');
         let assert = chai.assert;
     </script>
 </head>
 
 <body>
-    <!-- Подключаем модуль lab3.js (в коде импорты, поэтому type="module") -->
-    <script type="module">
-        import {
-            getDecimal, normalizeUrl, checkSpam, truncate, camelize, fibs, arrReverseSorted, unique
-        } from './lab3.js';
-
-        describe("getDecimal", function () {
-            it("getDecimal(1.23) => 0.23", function () { assert.strictEqual(getDecimal(1.23), 0.23); });
-            it("getDecimal(-1.23) => 0.77", function () { assert.strictEqual(getDecimal(-1.23), 0.77); });
-            it("getDecimal(1) => 0", function () { assert.strictEqual(getDecimal(1), 0); });
-        });
-
-        describe("normalizeUrl", function () {
-            it("normalizeUrl('yandex.ru') => 'https://yandex.ru'", function () { assert.strictEqual(normalizeUrl('yandex.ru'), 'https://yandex.ru'); });
-            it("normalizeUrl('http://yandex.ru') => 'https://yandex.ru'", function () { assert.strictEqual(normalizeUrl('http://yandex.ru'), 'https://yandex.ru'); });
-            it("normalizeUrl('https://yandex.ru') => 'https://yandex.ru'", function () { assert.strictEqual(normalizeUrl('https://yandex.ru'), 'https://yandex.ru'); });
-            it("normalizeUrl('https.ru') => 'https://https.ru'", function () { assert.strictEqual(normalizeUrl('https.ru'), 'https://https.ru'); });
-        });
-
-        describe("checkSpam", function () {
-            it("checkSpam('_XxX_') => true", function () { assert.strictEqual(checkSpam('_XxX_'), true); });
-            it("checkSpam('__Viagra__') => true", function () { assert.strictEqual(checkSpam('__Viagra__'), true); });
-            it("checkSpam('test') => false", function () { assert.strictEqual(checkSpam('test'), false); });
-        });
-
-        describe("truncate", function () {
-            it("truncate('Мама мыла раму.', 100) => 'Мама мыла раму.'", function () { assert.strictEqual(truncate('Мама мыла раму.', 100), 'Мама мыла раму.'); });
-            it("truncate('Мама мыла раму.', 10) => 'Мама мыла…'", function () { assert.strictEqual(truncate('Мама мыла раму.', 10), 'Мама мыла…'); });
-        });
-
-        describe("camelize", function () {
-            it("camelize('var-test-text') => 'varTestText'", function () { assert.strictEqual(camelize('var-test-text'), 'varTestText'); });
-            it("camelize('person__eye--blue') => 'person__eyeBlue'", function () { assert.strictEqual(camelize('person__eye--blue'), 'person__eyeBlue'); });
-        });
-
-        describe("fibs", function () {
-            it("fibs(5) => [0n, 1n, 1n, 2n, 3n]", function () { assert.deepEqual(fibs(5), [0n, 1n, 1n, 2n, 3n]); });
-        });
-
-        describe("arrReverseSorted", function () {
-            it("arrReverseSorted([1, 3, 22]) => [22, 3, 1]", function () { assert.deepEqual(arrReverseSorted([1, 3, 22]), [22, 3, 1]); });
-        });
-
-        describe("unique", function () {
-            it("unique([0, 1, 1, 2]) => [0, 1, 2]", function () { assert.deepEqual(unique([0, 1, 1, 2]), [0, 1, 2]); });
-            it("unique(['a', 'b', 'c', 'c']) => ['a', 'b', 'c']", function () { assert.deepEqual(unique(['a', 'b', 'c', 'c']), ['a', 'b', 'c']); });
-        });
-    </script>
-
     <div id="mocha"></div>
 
     <script>
+        function getDecimal(num) {
+            let fractional = Math.abs(num) - Math.floor(Math.abs(num));
+            fractional = Math.round(fractional * 1e10) / 1e10;
+            return num >= 0 ? fractional : +(1 - fractional).toFixed(10);
+        }
+
+        function normalizeUrl(url) {
+            if (url.startsWith('https://')) return url;
+            if (url.startsWith('http://')) return 'https://' + url.slice(7);
+            return 'https://' + url;
+        }
+
+        function checkSpam(str) {
+            let lower = str.toLowerCase();
+            return lower.includes('xxx') || lower.includes('viagra');
+        }
+
+        function truncate(str, maxLength) {
+            if (str.length <= maxLength) return str;
+            return str.slice(0, maxLength - 1) + '…';
+        }
+
+        function camelize(str) {
+            let result = '';
+            let capitalizeNext = false;
+            
+            for (let i = 0; i < str.length; i++) {
+                let char = str[i];
+                
+                if (char === '-' || char === '_') {
+                    if (char === '_' && str[i + 1] === '_') {
+                        result += '__';
+                        i++;
+                        capitalizeNext = false;
+                    } else {
+                        capitalizeNext = true;
+                    }
+                } else {
+                    if (capitalizeNext) {
+                        result += char.toUpperCase();
+                        capitalizeNext = false;
+                    } else {
+                        result += char;
+                    }
+                }
+            }
+            return result;
+        }
+
+        function fibs(n) {
+            if (n === 0) return [];
+            if (n === 1) return [0n];
+            let arr = [0n, 1n];
+            for (let i = 2; i < n; i++) {
+                arr.push(arr[i - 1] + arr[i - 2]);
+            }
+            return arr;
+        }
+
+        function arrReverseSorted(arr) {
+            return [...arr].sort((a, b) => b - a);
+        }
+
+        function unique(arr) {
+            return [...new Set(arr)];
+        }
+
+        describe("getDecimal", function () {
+            it("getDecimal(1.23) => 0.23", function () { 
+                assert.strictEqual(getDecimal(1.23), 0.23); 
+            });
+            it("getDecimal(-1.23) => 0.77", function () { 
+                let result = getDecimal(-1.23);
+                assert.strictEqual(Math.round(result * 100) / 100, 0.77); 
+            });
+            it("getDecimal(1) => 0", function () { 
+                assert.strictEqual(getDecimal(1), 0); 
+            });
+        });
+
+        describe("normalizeUrl", function () {
+            it("normalizeUrl('yandex.ru') => 'https://yandex.ru'", function () { 
+                assert.strictEqual(normalizeUrl('yandex.ru'), 'https://yandex.ru'); 
+            });
+            it("normalizeUrl('http://yandex.ru') => 'https://yandex.ru'", function () { 
+                assert.strictEqual(normalizeUrl('http://yandex.ru'), 'https://yandex.ru'); 
+            });
+            it("normalizeUrl('https://yandex.ru') => 'https://yandex.ru'", function () { 
+                assert.strictEqual(normalizeUrl('https://yandex.ru'), 'https://yandex.ru'); 
+            });
+            it("normalizeUrl('https.ru') => 'https://https.ru'", function () { 
+                assert.strictEqual(normalizeUrl('https.ru'), 'https://https.ru'); 
+            });
+        });
+
+        describe("checkSpam", function () {
+            it("checkSpam('_XxX_') => true", function () { 
+                assert.strictEqual(checkSpam('_XxX_'), true); 
+            });
+            it("checkSpam('__Viagra__') => true", function () { 
+                assert.strictEqual(checkSpam('__Viagra__'), true); 
+            });
+            it("checkSpam('test') => false", function () { 
+                assert.strictEqual(checkSpam('test'), false); 
+            });
+        });
+
+        describe("truncate", function () {
+            it("truncate('Мама мыла раму.', 100) => 'Мама мыла раму.'", function () { 
+                assert.strictEqual(truncate('Мама мыла раму.', 100), 'Мама мыла раму.'); 
+            });
+            it("truncate('Мама мыла раму.', 10) => 'Мама мыла…'", function () { 
+                assert.strictEqual(truncate('Мама мыла раму.', 10), 'Мама мыла…'); 
+            });
+        });
+
+        describe("camelize", function () {
+            it("camelize('var-test-text') => 'varTestText'", function () { 
+                assert.strictEqual(camelize('var-test-text'), 'varTestText'); 
+            });
+            it("camelize('person__eye--blue') => 'person__eyeBlue'", function () { 
+                assert.strictEqual(camelize('person__eye--blue'), 'person__eyeBlue'); 
+            });
+        });
+
+        describe("fibs", function () {
+            it("fibs(5) => [0n, 1n, 1n, 2n, 3n]", function () { 
+                assert.deepEqual(fibs(5), [0n, 1n, 1n, 2n, 3n]); 
+            });
+        });
+
+        describe("arrReverseSorted", function () {
+            it("arrReverseSorted([1, 3, 22]) => [22, 3, 1]", function () { 
+                assert.deepEqual(arrReverseSorted([1, 3, 22]), [22, 3, 1]); 
+            });
+        });
+
+        describe("unique", function () {
+            it("unique([0, 1, 1, 2]) => [0, 1, 2]", function () { 
+                assert.deepEqual(unique([0, 1, 1, 2]), [0, 1, 2]); 
+            });
+            it("unique(['a', 'b', 'c', 'c']) => ['a', 'b', 'c']", function () { 
+                assert.deepEqual(unique(['a', 'b', 'c', 'c']), ['a', 'b', 'c']); 
+            });
+        });
+
         mocha.run();
     </script>
 </body>

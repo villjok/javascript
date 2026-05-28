@@ -1,7 +1,7 @@
 'use strict';
 
 // Импорт функции fib из лабы 2
-import { fib } from '../lab2js/lab2.js';
+import { fib } from '../lab_2/lab2.js';
 
 /**
  * Возвращает дробную часть числа.
